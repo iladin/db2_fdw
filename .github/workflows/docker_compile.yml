@@ -1,0 +1,32 @@
+name: docker compile
+
+on:
+    push:
+      branches:
+        - master
+    pull_request:
+      branches:
+        - master
+jobs:   
+    build:
+        runs-on: ubuntu-latest
+        steps:
+           - name: checkout
+             uses: actions/checkout@v3
+           - name: Set up Docker
+             uses: docker/setup-docker@v1
+     
+           - name: Build Docker image
+             run: docker build -t db2_fdw .
+
+           - name: Run Docker container
+             run: docker run --name db2_fdw db2_fdw make
+
+           - name: Copy shared library
+             run: docker cp db2_fdw:/workspace/db2_fdw.so ${{ github.workspace }}/db2_fdw.so
+     
+           - name: Upload shared library artifact
+             uses: actions/upload-artifact@v2
+             with:
+               name: db2_fdw
+               path: ${{ github.workspace }}/db2_fdw.so

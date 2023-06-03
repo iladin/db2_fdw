@@ -18,6 +18,7 @@ ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/l
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)" \
 && brew install curl postgresql@15 binutils gcc@11 && brew link binutils --force
 
+USER root
 # setup for db2 as well as paths for compiles
 RUN export DB2_HOME=/opt/ibm/db2/V11.5 \
 && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile \
